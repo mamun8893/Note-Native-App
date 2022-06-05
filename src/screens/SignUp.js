@@ -10,18 +10,46 @@ import {
 import React, { useState } from "react";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+const auth = getAuth();
 
 const genderOptions = ["Male", "Female"];
 
 export default function SignUP({ navigation }) {
   const [gender, setGender] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+
+  const handlePress = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        // ..
+      });
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 16, paddingTop: 30 }}>
-        <Input placeholder="Email Address" />
-        <Input placeholder="Password" secureTextEntry />
-        <Input placeholder="Full Name" />
-        <Input placeholder="Age" />
+        <Input
+          placeholder="Email Address"
+          onChangeText={(text) => setEmail(text)}
+        />
+        <Input
+          placeholder="Password"
+          secureTextEntry
+          onChangeText={(text) => setPassword(text)}
+        />
+        <Input placeholder="Full Name" onChangeText={(text) => setName(text)} />
+        <Input placeholder="Age" onChangeText={(text) => setAge(text)} />
         <Text style={{ marginTop: 10, marginBottom: 20 }}>Select Gender</Text>
         {genderOptions.map((option, index) => {
           const selected = option === gender;
@@ -54,6 +82,7 @@ export default function SignUP({ navigation }) {
         <Button
           title="Signup"
           customStyle={{ alignSelf: "center", marginBottom: 60 }}
+          onPress={handlePress}
         />
 
         <Pressable onPress={() => navigation.navigate("SignIn")}>

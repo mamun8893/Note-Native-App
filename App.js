@@ -7,8 +7,11 @@ import Create from "./src/screens/Create";
 import SignIn from "./src/screens/SignIn";
 import SignUp from "./src/screens/SignUp";
 import Edit from "./src/screens/Edit";
+import initializeAuth from "./src/firebase/firebase.init";
 
 const Stack = createNativeStackNavigator();
+
+initializeAuth();
 
 const AppTheme = {
   ...DefaultTheme,
