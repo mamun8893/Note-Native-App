@@ -6,11 +6,12 @@ import {
   TextInput,
   StyleSheet,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, db } from "../../App";
 import { addDoc, collection } from "firebase/firestore";
 
@@ -22,8 +23,10 @@ export default function SignUP({ navigation }) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handlePress = () => {
+    setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -35,27 +38,41 @@ export default function SignUP({ navigation }) {
           age: age,
           gender: gender,
         });
+        setLoading(false);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        setLoading(false);
         // ..
       });
   };
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator color="blue" size="large" />
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 16, paddingTop: 30 }}>
         <Input
           placeholder="Email Address"
           onChangeText={(text) => setEmail(text)}
+          autoCapitalize="none"
         />
         <Input
           placeholder="Password"
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
         />
-        <Input placeholder="Full Name" onChangeText={(text) => setName(text)} />
+        <Input
+          placeholder="Full Name"
+          onChangeText={(text) => setName(text)}
+          autoCapitalize="words"
+        />
         <Input placeholder="Age" onChangeText={(text) => setAge(text)} />
         <Text style={{ marginTop: 10, marginBottom: 20 }}>Select Gender</Text>
         {genderOptions.map((option, index) => {
