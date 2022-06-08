@@ -10,9 +10,9 @@ import {
 import React, { useState } from "react";
 import Button from "../components/Button/Button";
 import Input from "../components/Input/Input";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
-const auth = getAuth();
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../App";
+import { addDoc, collection } from "firebase/firestore";
 
 const genderOptions = ["Male", "Female"];
 
@@ -27,7 +27,14 @@ export default function SignUP({ navigation }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
+        // console.log(user.uid);
+        addDoc(collection(db, "user"), {
+          uid: user.uid,
+          email: email,
+          name: name,
+          age: age,
+          gender: gender,
+        });
       })
       .catch((error) => {
         const errorCode = error.code;

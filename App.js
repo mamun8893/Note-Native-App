@@ -8,10 +8,14 @@ import SignIn from "./src/screens/SignIn";
 import SignUp from "./src/screens/SignUp";
 import Edit from "./src/screens/Edit";
 import initializeAuth from "./src/firebase/firebase.init";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const Stack = createNativeStackNavigator();
 
-initializeAuth();
+const app = initializeAuth();
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 const AppTheme = {
   ...DefaultTheme,
