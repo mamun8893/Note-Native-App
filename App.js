@@ -45,10 +45,6 @@ export default function App() {
     return authSubscription;
   }, []);
 
-  // useEffect(() => {
-  //   signOut(auth);
-  // }, []);
-
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -67,7 +63,9 @@ export default function App() {
               component={Home}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="Create" component={Create} />
+            <Stack.Screen name="Create" options={{ headerShown: false }}>
+              {(props) => <Create {...props} user={user} />}
+            </Stack.Screen>
             <Stack.Screen name="Edit" component={Edit} />
           </>
         ) : (
