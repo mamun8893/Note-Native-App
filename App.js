@@ -58,11 +58,9 @@ export default function App() {
       <Stack.Navigator>
         {user ? (
           <>
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="Home" options={{ headerShown: false }}>
+              {(props) => <Home {...props} user={user} />}
+            </Stack.Screen>
             <Stack.Screen name="Create" options={{ headerShown: false }}>
               {(props) => <Create {...props} user={user} />}
             </Stack.Screen>
