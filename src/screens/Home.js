@@ -4,6 +4,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import {
   collection,
+  deleteDoc,
+  doc,
   onSnapshot,
   query,
   QuerySnapshot,
@@ -48,8 +50,11 @@ export default function Home({ user }) {
         </Text>
         <Text style={{ fontSize: 18, color: "#fff" }}>{item.description}</Text>
 
-        <Pressable style={{ position: "absolute", top: 0, right: 0 }}>
-          <AntDesign name="delete" size={24} color="white" />
+        <Pressable
+          style={{ position: "absolute", top: 10, right: 10, zIndex: 99 }}
+          onPress={() => deleteDoc(doc(db, "notes", item.id))}
+        >
+          <AntDesign name="delete" size={20} color="white" />
         </Pressable>
       </Pressable>
     );

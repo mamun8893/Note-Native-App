@@ -24,8 +24,6 @@ export default function Create({ user, route }) {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  console.log("note-ite,->>", description);
-
   const onPressUpdate = async () => {
     setLoading(true);
     try {
