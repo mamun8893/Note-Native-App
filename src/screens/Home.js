@@ -11,24 +11,6 @@ import {
 } from "firebase/firestore";
 import { db } from "../../App";
 
-const renderItem = ({ item }) => {
-  return (
-    <View
-      style={{
-        backgroundColor: item.noteColor,
-        borderRadius: 16,
-        padding: 15,
-        marginBottom: 10,
-      }}
-    >
-      <Text style={{ fontSize: 22, color: "#fff", marginBottom: 5 }}>
-        {item.title}
-      </Text>
-      <Text style={{ fontSize: 18, color: "#fff" }}>{item.description}</Text>
-    </View>
-  );
-};
-
 export default function Home({ user }) {
   const [notes, setNotes] = useState([]);
   const navigation = useNavigation();
@@ -41,12 +23,37 @@ export default function Home({ user }) {
     const notesSubscription = onSnapshot(q, (QuerySnapshot) => {
       const list = [];
       QuerySnapshot.forEach((doc) => {
-        list.push(doc.data());
+        list.push({ ...doc.data(), id: doc.id });
       });
       setNotes(list);
     });
     return notesSubscription;
   }, []);
+
+  const renderItem = ({ item }) => {
+    return (
+      <Pressable
+        style={{
+          backgroundColor: item.noteColor,
+          borderRadius: 16,
+          padding: 15,
+          marginBottom: 10,
+        }}
+        onPress={() => {
+          navigation.navigate("Edit", { item });
+        }}
+      >
+        <Text style={{ fontSize: 22, color: "#fff", marginBottom: 5 }}>
+          {item.title}
+        </Text>
+        <Text style={{ fontSize: 18, color: "#fff" }}>{item.description}</Text>
+
+        <Pressable style={{ position: "absolute", top: 0, right: 0 }}>
+          <AntDesign name="delete" size={24} color="white" />
+        </Pressable>
+      </Pressable>
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

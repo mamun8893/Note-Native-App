@@ -64,7 +64,11 @@ export default function App() {
             <Stack.Screen name="Create" options={{ headerShown: false }}>
               {(props) => <Create {...props} user={user} />}
             </Stack.Screen>
-            <Stack.Screen name="Edit" component={Edit} />
+            <Stack.Screen
+              name="Edit"
+              component={Edit}
+              options={{ headerShown: false }}
+            />
           </>
         ) : (
           <>
