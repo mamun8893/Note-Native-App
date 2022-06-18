@@ -12,6 +12,7 @@ import Button from "../components/Button/Button";
 import { async } from "@firebase/util";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../App";
+import { useNavigation } from "@react-navigation/native";
 
 const noteOptions = ["red", "blue", "green"];
 
@@ -20,6 +21,7 @@ export default function Create({ user }) {
   const [description, setDescription] = useState("");
   const [noteColor, setNoteColor] = useState("blue");
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   const onPressCreate = async () => {
     setLoading(true);
@@ -31,6 +33,7 @@ export default function Create({ user }) {
         uid: user.uid,
       });
       setLoading(false);
+      navigation.goBack();
     } catch (err) {
       console.log(err);
       setLoading(false);

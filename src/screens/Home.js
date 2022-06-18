@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Pressable } from "react-native";
+import { View, Text, SafeAreaView, Pressable, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +10,24 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../App";
+
+const renderItem = ({ item }) => {
+  return (
+    <View
+      style={{
+        backgroundColor: item.noteColor,
+        borderRadius: 16,
+        padding: 15,
+        marginBottom: 10,
+      }}
+    >
+      <Text style={{ fontSize: 22, color: "#fff", marginBottom: 5 }}>
+        {item.title}
+      </Text>
+      <Text style={{ fontSize: 18, color: "#fff" }}>{item.description}</Text>
+    </View>
+  );
+};
 
 export default function Home({ user }) {
   const [notes, setNotes] = useState([]);
@@ -30,8 +48,6 @@ export default function Home({ user }) {
     return notesSubscription;
   }, []);
 
-  console.log("Notes-->", notes);
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View
@@ -47,6 +63,12 @@ export default function Home({ user }) {
           <AntDesign name="pluscircleo" size={24} color="black" />
         </Pressable>
       </View>
+      <FlatList
+        data={notes}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={{ padding: 20 }}
+      />
     </SafeAreaView>
   );
 }
